@@ -8,8 +8,8 @@ import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useState } from "react";
 
+import { Footer } from "@/components/footer";
 import Header from "@/components/header";
-import { ThemeProvider } from "@/components/theme-provider";
 import { link, orpc } from "@/utils/orpc";
 
 import "../index.css";
@@ -24,11 +24,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
     meta: [
       {
-        title: "better-t-app",
+        title: "Teoria — 音楽理論を学ぶプラットフォーム",
       },
       {
         name: "description",
-        content: "better-t-app is a web application",
+        content: "音楽理論を体系的に学べるインタラクティブなプラットフォーム",
       },
     ],
     links: [
@@ -47,18 +47,17 @@ function RootComponent() {
   return (
     <>
       <HeadContent />
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        disableTransitionOnChange
-        storageKey="vite-ui-theme"
+      <div
+        className="flex min-h-svh flex-col"
+        style={{ backgroundColor: "#0e0d0c", color: "#f5f0e8" }}
       >
-        <div className="grid grid-rows-[auto_1fr] h-svh">
-          <Header />
+        <Header />
+        <main className="flex-1">
           <Outlet />
-        </div>
-        <Toaster richColors />
-      </ThemeProvider>
+        </main>
+        <Footer />
+      </div>
+      <Toaster richColors />
       <TanStackRouterDevtools position="bottom-left" />
       <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
     </>
