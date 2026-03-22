@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0d0c;
+    --paper: #f5f0e8;
+    --cream: #ede7d8;
+    --gold: #c9a84c;
+    --gold-light: #e8cc87;
+    --rust: #8b3a2a;
+    --sage: #4a6741;
+    --muted: #6b6356;
+    --staff: #2a2520;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ink);
+    color: var(--paper);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 3rem;
+    border-bottom: 0.5px solid rgba(201,168,76,0.25);
+    position: sticky;
+    top: 0;
+    background: rgba(14,13,12,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.04em;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-clef {
+    font-size: 2rem;
+    line-height: 1;
+    font-style: italic;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  nav ul li a {
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: rgba(245,240,232,0.6);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul li a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold);
+    color: var(--ink) !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 2px;
+    font-weight: 500 !important;
+  }
+  .nav-cta:hover { background: var(--gold-light); color: var(--ink) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 88vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    padding: 6rem 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 0.5px;
+    background: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 4.8rem);
+    line-height: 1.05;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    color: var(--paper);
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: rgba(245,240,232,0.55);
+    line-height: 1.8;
+    max-width: 420px;
+    margin-bottom: 3rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--ink);
+    padding: 0.85rem 2rem;
+    border-radius: 2px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--paper);
+    padding: 0.85rem 1.5rem;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    border: 0.5px solid rgba(245,240,232,0.3);
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── PIANO ── */
+  .hero-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 2rem;
+  }
+
+  .piano-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .staff-lines {
+    position: absolute;
+    top: -60px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+  .staff-line {
+    height: 0.5px;
+    background: rgba(201,168,76,0.3);
+  }
+
+  .piano {
+    display: flex;
+    position: relative;
+    height: 160px;
+    border-radius: 0 0 6px 6px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .white-key {
+    flex: 1;
+    background: linear-gradient(to bottom, #f0ebe0, #e8e1d0);
+    border-right: 0.5px solid rgba(0,0,0,0.15);
+    border-radius: 0 0 4px 4px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .white-key:hover { background: linear-gradient(to bottom, #e8d88a, #d4c06a); }
+  .white-key.active { background: linear-gradient(to bottom, #c9a84c, #a8882a); }
+
+  .black-keys {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .black-key {
+    position: absolute;
+    top: 0;
+    width: 7%;
+    height: 62%;
+    background: linear-gradient(to bottom, #1a1714, #2a2520);
+    border-radius: 0 0 3px 3px;
+    pointer-events: all;
+    cursor: pointer;
+    transition: background 0.1s;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.5);
+  }
+  .black-key:hover { background: linear-gradient(to bottom, #3a3320, #c9a84c); }
+  .black-key.active { background: linear-gradient(to bottom, #c9a84c, #7a6020); }
+
+  .bk1 { left: calc(1 * (100%/7) - 3.5%) }
+  .bk2 { left: calc(2 * (100%/7) - 3.5%) }
+  .bk3 { left: calc(4 * (100%/7) - 3.5%) }
+  .bk4 { left: calc(5 * (100%/7) - 3.5%) }
+  .bk5 { left: calc(6 * (100%/7) - 3.5%) }
+
+  .note-label {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    color: rgba(42,37,32,0.5);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .floating-note {
+    position: absolute;
+    font-family: serif;
+    font-size: 2rem;
+    color: var(--gold);
+    opacity: 0;
+    animation: floatNote 3s ease-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes floatNote {
+    0% { opacity: 0; transform: translateY(0) rotate(-10deg); }
+    20% { opacity: 0.8; }
+    100% { opacity: 0; transform: translateY(-80px) rotate(10deg); }
+  }
+
+  /* ── SECTION: COURSES ── */
+  .section {
+    padding: 6rem 3rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+  }
+
+  .section-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: var(--paper);
+    line-height: 1.2;
+  }
+
+  .see-all {
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    border-bottom: 0.5px solid var(--gold);
+    padding-bottom: 2px;
+    white-space: nowrap;
+  }
+
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+  }
+
+  .course-card {
+    background: #1a1814;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.25s;
+  }
+  .course-card:hover { background: #221f18; }
+  .course-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+
+  .card-level {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .level-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .level-beginner .level-dot { background: var(--sage); }
+  .level-intermediate .level-dot { background: var(--gold); }
+  .level-advanced .level-dot { background: var(--rust); }
+  .level-beginner { color: var(--sage); }
+  .level-intermediate { color: var(--gold); }
+  .level-advanced { color: var(--rust); }
+
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.25rem;
+    display: block;
+    line-height: 1;
+    filter: grayscale(0.3);
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--paper);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: rgba(245,240,232,0.45);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    font-size: 0.72rem;
+    color: rgba(245,240,232,0.35);
+  }
+
+  .card-arrow {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    color: var(--gold);
+    font-size: 1.2rem;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.25s;
+  }
+
+  /* ── DIVIDER with staff ── */
+  .staff-divider {
+    padding: 0 3rem;
+    margin: 0;
+    position: relative;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  .staff-divider-inner {
+    width: 100%;
+    position: relative;
+    height: 48px;
+  }
+  .sd-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0.5px;
+    background: rgba(201,168,76,0.15);
+  }
+  .sd-notes {
+    position: absolute;
+    top: -8px;
+    display: flex;
+    gap: 48px;
+    padding-left: 40px;
+    font-family: serif;
+    font-size: 1.6rem;
+    color: rgba(201,168,76,0.4);
+  }
+
+  /* ── INTERACTIVE THEORY ── */
+  .theory-section {
+    padding: 6rem 3rem;
+    background: #0a0908;
+  }
+
+  .theory-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .theory-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: var(--paper);
+    margin-bottom: 1.25rem;
+    line-height: 1.2;
+  }
+
+  .theory-content p {
+    font-size: 0.9rem;
+    color: rgba(245,240,232,0.5);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: rgba(245,240,232,0.7);
+  }
+  .feature-list li::before {
+    content: '';
+    width: 20px;
+    height: 0.5px;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .circle-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .circle-svg {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-section {
+    padding: 5rem 3rem;
+    background: #141210;
+  }
+
+  .progress-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5px;
+    margin-top: 3rem;
+  }
+
+  .prog-card {
+    background: #1a1814;
+    padding: 1.75rem;
+  }
+
+  .prog-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .prog-label {
+    font-size: 0.8rem;
+    color: rgba(245,240,232,0.45);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 3rem;
+    border-top: 0.5px solid rgba(201,168,76,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6rem;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 1.1rem;
+  }
+
+  .footer-text {
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.25);
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <span class="logo-clef">𝄞</span>
+    Teoria
+  </div>
+  <ul>
+    <li><a href="#">コース</a></li>
+    <li><a href="#">理論</a></li>
+    <li><a href="#">練習</a></li>
+    <li><a href="#">コミュニティ</a></li>
+    <li><a href="#" class="nav-cta">無料で始める</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">音楽の言語を学ぶ</div>
+    <h1>音楽を<br><em>理解する</em><br>ための場所</h1>
+    <p class="hero-sub">音符の読み方から複雑な和声まで。体系的に、美しく、あなたのペースで音楽理論を習得しましょう。</p>
+    <div class="hero-actions">
+      <button class="btn-primary">レッスンを始める</button>
+      <button class="btn-ghost">デモを見る →</button>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="piano-wrapper">
+      <div class="staff-lines">
+        <div class="staff-line"></div>
+        <div class="staff-line"></div>
+        <div class="staff-line"></div>
+        <div class="staff-line"></div>
+        <div class="staff-line"></div>
+      </div>
+      <div class="piano" id="piano">
+        <div class="white-key" data-note="C"><span class="note-label">C</span></div>
+        <div class="white-key" data-note="D"><span class="note-label">D</span></div>
+        <div class="white-key" data-note="E"><span class="note-label">E</span></div>
+        <div class="white-key" data-note="F"><span class="note-label">F</span></div>
+        <div class="white-key" data-note="G"><span class="note-label">G</span></div>
+        <div class="white-key" data-note="A"><span class="note-label">A</span></div>
+        <div class="white-key" data-note="B"><span class="note-label">B</span></div>
+        <div class="black-keys">
+          <div class="black-key bk1" data-note="C#"></div>
+          <div class="black-key bk2" data-note="D#"></div>
+          <div class="black-key bk3" data-note="F#"></div>
+          <div class="black-key bk4" data-note="G#"></div>
+          <div class="black-key bk5" data-note="A#"></div>
+        </div>
+      </div>
+      <div class="floating-note" style="left:15%;top:20%;animation-delay:0s;">♩</div>
+      <div class="floating-note" style="left:40%;top:10%;animation-delay:1.2s;">♪</div>
+      <div class="floating-note" style="left:70%;top:30%;animation-delay:2.1s;">♫</div>
+      <div class="floating-note" style="left:85%;top:5%;animation-delay:0.7s;">♬</div>
+    </div>
+  </div>
+</section>
+
+<!-- STAFF DIVIDER -->
+<div class="staff-divider">
+  <div class="staff-divider-inner">
+    <div class="sd-line" style="top:20%"></div>
+    <div class="sd-line" style="top:40%"></div>
+    <div class="sd-line" style="top:60%"></div>
+    <div class="sd-line" style="top:80%"></div>
+    <div class="sd-notes">♩ ♪ ♫ ♬ ♩ ♪ ♫ ♬ ♩ ♪ ♫ ♬ ♩ ♪</div>
+  </div>
+</div>
+
+<!-- COURSES -->
+<section class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">カリキュラム</div>
+      <div class="section-title">コースを選ぶ</div>
+    </div>
+    <a href="#" class="see-all">すべて見る →</a>
+  </div>
+
+  <div class="courses-grid">
+    <div class="course-card">
+      <span class="card-icon">𝄞</span>
+      <div class="card-level level-beginner"><span class="level-dot"></span>入門</div>
+      <div class="card-title">楽譜の読み方</div>
+      <div class="card-desc">音部記号、音符の名前、リズムの基礎から始める、はじめての楽譜入門。</div>
+      <div class="card-meta"><span>12 レッスン</span><span>約 4 時間</span></div>
+      <span class="card-arrow">→</span>
+    </div>
+    <div class="course-card">
+      <span class="card-icon">🎵</span>
+      <div class="card-level level-intermediate"><span class="level-dot"></span>中級</div>
+      <div class="card-title">スケールと調性</div>
+      <div class="card-desc">長調・短調の構造、平行調、転調のしくみを体系的に学ぶ。</div>
+      <div class="card-meta"><span>18 レッスン</span><span>約 7 時間</span></div>
+      <span class="card-arrow">→</span>
+    </div>
+    <div class="course-card">
+      <span class="card-icon">🎹</span>
+      <div class="card-level level-intermediate"><span class="level-dot"></span>中級</div>
+      <div class="card-title">和音と和声進行</div>
+      <div class="card-desc">コードの構成、機能和声、ポピュラー音楽に使われる進行パターン。</div>
+      <div class="card-meta"><span>22 レッスン</span><span>約 9 時間</span></div>
+      <span class="card-arrow">→</span>
+    </div>
+    <div class="course-card">
+      <span class="card-icon">🎼</span>
+      <div class="card-level level-advanced"><span class="level-dot"></span>上級</div>
+      <div class="card-title">対位法</div>
+      <div class="card-desc">バッハに学ぶ声部進行の美学。厳格対位法から自由対位法まで。</div>
+      <div class="card-meta"><span>30 レッスン</span><span>約 14 時間</span></div>
+      <span class="card-arrow">→</span>
+    </div>
+    <div class="course-card">
+      <span class="card-icon">🥁</span>
+      <div class="card-level level-beginner"><span class="level-dot"></span>入門</div>
+      <div class="card-title">リズムと拍子</div>
+      <div class="card-desc">4/4、3/4、6/8拍子の違い、シンコペーション、ポリリズムの基礎。</div>
+      <div class="card-meta"><span>10 レッスン</span><span>約 3 時間</span></div>
+      <span class="card-arrow">→</span>
+    </div>
+    <div class="course-card">
+      <span class="card-icon">🎷</span>
+      <div class="card-level level-advanced"><span class="level-dot"></span>上級</div>
+      <div class="card-title">ジャズ和声</div>
+      <div class="card-desc">テンションコード、モーダルインターチェンジ、コルトレーン・チェンジ。</div>
+      <div class="card-meta"><span>28 レッスン</span><span>約 12 時間</span></div>
+      <span class="card-arrow">→</span>
+    </div>
+  </div>
+</section>
+
+<!-- THEORY INTERACTIVE -->
+<section class="theory-section">
+  <div class="theory-grid">
+    <div class="theory-content">
+      <div class="section-tag">インタラクティブ学習</div>
+      <h2>五度圏で<br>調性を理解する</h2>
+      <p>音楽の全12のキーが円状に並んだ五度圏は、調性音楽の地図です。タップして各キーの関係性を視覚的に探索できます。</p>
+      <ul class="feature-list">
+        <li>各調の平行調・属調を即座に確認</li>
+        <li>♯と♭の数を視覚的に把握</li>
+        <li>コード進行と調の関係を理解</li>
+        <li>転調のルートをインタラクティブに学習</li>
+      </ul>
+    </div>
+
+    <div class="circle-wrapper">
+      <svg class="circle-svg" viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg" id="fifths-circle">
+        <g id="outer-segments"></g>
+        <g id="inner-segments"></g>
+        <circle cx="170" cy="170" r="52" fill="#1a1814" stroke="rgba(201,168,76,0.3)" stroke-width="0.5"/>
+        <text x="170" y="165" text-anchor="middle" fill="#c9a84c" font-family="'Playfair Display', serif" font-size="13" font-style="italic">五度圏</text>
+        <text x="170" y="183" text-anchor="middle" fill="rgba(245,240,232,0.35)" font-family="'DM Sans', sans-serif" font-size="9">Circle of Fifths</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="progress-section">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">実績</div>
+      <div class="section-title">学習者の声</div>
+    </div>
+  </div>
+  <div class="progress-cards">
+    <div class="prog-card">
+      <div class="prog-number">12K+</div>
+      <div class="prog-label">学習者が登録</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-number">98</div>
+      <div class="prog-label">個のレッスン</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-number">4.9</div>
+      <div class="prog-label">平均評価（5点満点）</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-number">∞</div>
+      <div class="prog-label">音楽の可能性</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">𝄞 Teoria</div>
+  <div class="footer-text">© 2025 Teoria — 音楽理論学習プラットフォーム</div>
+  <div class="footer-text">プライバシー · 利用規約</div>
+</footer>
+
+<script>
+document.querySelectorAll('.white-key, .black-key').forEach(key => {
+  key.addEventListener('click', function() {
+    this.classList.toggle('active');
+    setTimeout(() => this.classList.remove('active'), 600);
+  });
+});
+
+const majorKeys = ['C','G','D','A','E','B','F♯','D♭','A♭','E♭','B♭','F'];
+const minorKeys = ['Am','Em','Bm','F♯m','C♯m','G♯m','D♯m','B♭m','Fm','Cm','Gm','Dm'];
+
+const svg = document.getElementById('fifths-circle');
+const outerG = document.getElementById('outer-segments');
+const innerG = document.getElementById('inner-segments');
+
+const cx = 170, cy = 170;
+const outerR = 160, midR = 108, innerR = 72;
+const TAU = Math.PI * 2;
+
+majorKeys.forEach((key, i) => {
+  const startAngle = (i / 12) * TAU - TAU / 24 - TAU / 4;
+  const endAngle = ((i + 1) / 12) * TAU - TAU / 24 - TAU / 4;
+  const midAngle = (startAngle + endAngle) / 2;
+
+  const x1 = cx + outerR * Math.cos(startAngle);
+  const y1 = cy + outerR * Math.sin(startAngle);
+  const x2 = cx + outerR * Math.cos(endAngle);
+  const y2 = cy + outerR * Math.sin(endAngle);
+  const x3 = cx + midR * Math.cos(endAngle);
+  const y3 = cy + midR * Math.sin(endAngle);
+  const x4 = cx + midR * Math.cos(startAngle);
+  const y4 = cy + midR * Math.sin(startAngle);
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const d = `M ${x1} ${y1} A ${outerR} ${outerR} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${midR} ${midR} 0 0 0 ${x4} ${y4} Z`;
+  path.setAttribute('d', d);
+  path.setAttribute('fill', 'rgba(201,168,76,0.06)');
+  path.setAttribute('stroke', 'rgba(201,168,76,0.18)');
+  path.setAttribute('stroke-width', '0.5');
+  path.style.cursor = 'pointer';
+  path.style.transition = 'fill 0.2s';
+  path.addEventListener('mouseenter', () => path.setAttribute('fill','rgba(201,168,76,0.2)'));
+  path.addEventListener('mouseleave', () => path.setAttribute('fill','rgba(201,168,76,0.06)'));
+  outerG.appendChild(path);
+
+  const lx = cx + (outerR + midR) / 2 * Math.cos(midAngle);
+  const ly = cy + (outerR + midR) / 2 * Math.sin(midAngle);
+  const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  text.setAttribute('x', lx);
+  text.setAttribute('y', ly + 4);
+  text.setAttribute('text-anchor', 'middle');
+  text.setAttribute('fill', '#c9a84c');
+  text.setAttribute('font-family', "'Playfair Display', serif");
+  text.setAttribute('font-size', '13');
+  text.setAttribute('pointer-events', 'none');
+  text.textContent = key;
+  outerG.appendChild(text);
+
+  const ix1 = cx + midR * Math.cos(startAngle);
+  const iy1 = cy + midR * Math.sin(startAngle);
+  const ix2 = cx + midR * Math.cos(endAngle);
+  const iy2 = cy + midR * Math.sin(endAngle);
+  const ix3 = cx + innerR * Math.cos(endAngle);
+  const iy3 = cy + innerR * Math.sin(endAngle);
+  const ix4 = cx + innerR * Math.cos(startAngle);
+  const iy4 = cy + innerR * Math.sin(startAngle);
+
+  const ipath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const id2 = `M ${ix1} ${iy1} A ${midR} ${midR} 0 0 1 ${ix2} ${iy2} L ${ix3} ${iy3} A ${innerR} ${innerR} 0 0 0 ${ix4} ${iy4} Z`;
+  ipath.setAttribute('d', id2);
+  ipath.setAttribute('fill', 'rgba(74,103,65,0.08)');
+  ipath.setAttribute('stroke', 'rgba(74,103,65,0.2)');
+  ipath.setAttribute('stroke-width', '0.5');
+  innerG.appendChild(ipath);
+
+  const mlx = cx + (midR + innerR) / 2 * Math.cos(midAngle);
+  const mly = cy + (midR + innerR) / 2 * Math.sin(midAngle);
+  const mtext = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  mtext.setAttribute('x', mlx);
+  mtext.setAttribute('y', mly + 3);
+  mtext.setAttribute('text-anchor', 'middle');
+  mtext.setAttribute('fill', 'rgba(74,103,65,0.9)');
+  mtext.setAttribute('font-family', "'DM Sans', sans-serif");
+  mtext.setAttribute('font-size', '8');
+  mtext.setAttribute('pointer-events', 'none');
+  mtext.textContent = minorKeys[i];
+  innerG.appendChild(mtext);
+});
+</script>
+</body>
+</html>
