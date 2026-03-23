@@ -24,7 +24,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
     meta: [
       {
-        title: "Teoria — 音楽理論を学ぶプラットフォーム",
+        title: "Theoremusica — 音楽理論を学ぶプラットフォーム",
       },
       {
         name: "description",

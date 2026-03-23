@@ -1,1 +1,1 @@
-# Teoria ~音楽理論を学ぶサイト~
+# Theoremusica ~音楽理論を学ぶサイト~

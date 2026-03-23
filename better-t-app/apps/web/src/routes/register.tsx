@@ -50,7 +50,7 @@ function RegisterComponent() {
             className="mb-2 font-serif text-3xl font-bold text-[#f5f0e8]"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
-            𝄞 Teoria を始める
+            𝄞 Theoremusica を始める
           </h1>
           <p className="text-sm text-[#6b6356]">
             無料アカウントを作成して音楽理論の学習を始めましょう

@@ -45,7 +45,7 @@ function LoginComponent() {
             className="mb-2 font-serif text-3xl font-bold text-[#f5f0e8]"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
-            𝄞 Teoria にログイン
+            𝄞 Theoremusica にログイン
           </h1>
           <p className="text-sm text-[#6b6356]">
             アカウントにサインインして学習を続けましょう

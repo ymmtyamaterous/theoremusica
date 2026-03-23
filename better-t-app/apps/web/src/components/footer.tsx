@@ -13,11 +13,11 @@ export function Footer({ className = "" }: FooterProps) {
             className="font-serif text-xl italic text-[#c9a84c]"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
-            𝄞 Teoria
+            𝄞 Theoremusica
           </span>
         </div>
 
-        <p className="text-xs text-[#6b6356]">© 2026 Teoria</p>
+        <p className="text-xs text-[#6b6356]">© 2026 Theoremusica</p>
 
         <nav className="flex gap-4 text-xs text-[#6b6356]">
           <a href="#" className="transition-colors hover:text-[#c9a84c]">

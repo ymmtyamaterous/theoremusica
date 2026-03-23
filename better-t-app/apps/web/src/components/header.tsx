@@ -29,7 +29,7 @@ export default function Header() {
             className="font-serif text-2xl italic text-[#c9a84c]"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
-            𝄞 Teoria
+            𝄞 Theoremusica
           </span>
         </Link>
 
