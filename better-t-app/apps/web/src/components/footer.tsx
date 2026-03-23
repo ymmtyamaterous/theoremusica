@@ -19,6 +19,10 @@ export function Footer({ className = "" }: FooterProps) {
 
         <p className="text-xs text-[#6b6356]">© 2026 Theoremusica</p>
 
+        <p className="w-full text-center text-xs text-[#6b6356]">
+          ⚠ サイト内のコース・レッスンコンテンツは生成AI（GitHub Copilot / Claude）を活用して作成されています。
+        </p>
+
         <nav className="flex gap-4 text-xs text-[#6b6356]">
           <a href="#" className="transition-colors hover:text-[#c9a84c]">
             プライバシー
